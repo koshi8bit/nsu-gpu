@@ -128,7 +128,7 @@ int main()
 
         if (iter % 100 == 0 || iter == 1)
         {
-            printf("iter %-5d; err %-10.6f\n", iter, err);
+            printf("iter %-5d err %-10.6f\n", iter, err);
         }
     }
 
