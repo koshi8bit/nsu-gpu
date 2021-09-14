@@ -2,13 +2,39 @@
 
 using namespace std;
 
+void printt(double **A, size_t m, size_t n)
+{
+	//std::copy
+	
+    for(size_t i=0; i<m; i++)
+    {
+        for(size_t j=0; j<n; j++)
+        {
+            printf("%-5.1f ", A[i][j]);
+        }
+        printf("\n");
+    }
+	//printf("\n"); 
+}
+
+void init(double **A, size_t m, size_t n)
+{
+	A[0][0] = 10;
+	A[m][0] = 20;
+	A[0][n] = 0;
+	A[m][n] = 10;
+
+	
+
+}
+
 int main()
 {
     cout << "Hello World!" << endl;
 
-    size_t iter_max = 10000;
-    const size_t m = 100;
-    const size_t n = 200;
+    size_t iter_max = 5;
+    const size_t m = 3;
+    const size_t n = 3;
 
     double **A = new double* [m];
     double **Anew = new double* [m];
@@ -19,24 +45,35 @@ int main()
         Anew[i] = new double [n];
     }
 
+
+	/*
     for(size_t i=0; i<m; i++)
     {
         for(size_t j=0; j<n; j++)
         {
-            A[i][j] = i*n + j;
-            cout << A[i][j] << " ";
+            cout << Anew[i][j] << " ";
         }
         cout << endl;
-    }
+    } */
 
-    // #pragma acc data copy(A) create(Anew)
+	printf("default\n");
+	init(A, m, n);
+	init(Anew, m, n);
+
+	printt(A, m, n);
+    printf("\n");
+ 
+
+	// return 0;
+    //#pragma acc data copy(A) create(Anew)
     size_t iter = 0;
-    double err = 0;
     double tol = 1e-5;
-    while(err<tol && iter < iter_max)
+    double err = tol+1.;
+    while((err>tol) && (iter<iter_max))
     {
         iter++;
-        // #pragma acc kernels
+		err = 0;
+        //#pragma acc kernels
         for(size_t i=1; i<m-1; i++)
         {
             for(size_t j=1; j<n-1; j++)
@@ -45,12 +82,25 @@ int main()
                 err = max(err, Anew[i][j] - A[i][j]);
             }
 
-            A = Anew;
+            // A = Anew;
+			printt(Anew, m, n); 
 
-            if (iter % 100 == 0 || iter == 1)
+            for(size_t ii=0; ii<m; ii++)
             {
-                cout << iter << err << endl;
+                for(size_t jj=0; jj<n; jj++)
+                {
+                    A[ii][jj] = Anew[ii][jj];
+                }
             }
+			printt(A, m, n); 
+			printf("\n");
+
+            //if (iter % 100 == 0 || iter == 1)
+            {
+                printf("iter %-5d; err %-10.6f\n", iter, err);
+            }
+
+				
         }
     }
 
