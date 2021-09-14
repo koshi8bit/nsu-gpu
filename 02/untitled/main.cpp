@@ -10,7 +10,7 @@ void printt(double **A, size_t m, size_t n)
     {
         for(size_t j=0; j<n; j++)
         {
-            printf("%-5.1f ", A[i][j]);
+            printf("%5.1f ", A[i][j]);
         }
         printf("\n");
     }
@@ -20,10 +20,41 @@ void printt(double **A, size_t m, size_t n)
 void init(double **A, size_t m, size_t n)
 {
 	A[0][0] = 10;
-	A[m][0] = 20;
-	A[0][n] = 0;
-	A[m][n] = 10;
+	A[m-1][0] = 20;
+	A[0][n-1] = 0;
+	A[m-1][n-1] = 10;
 
+	double a = (A[0][0] - A[0][n-1]) / (n-1);
+	printf("a=%f\n", a);
+ 
+	for (size_t i=1; i<n-1; i++)
+	{
+		A[0][i] = A[0][0]-a*i;			
+	}
+
+	double b = (A[0][n-1] - A[m-1][n-1]) / (m-1);
+	printf("b=%f\n", b);
+ 
+	for (size_t i=1; i<m-1; i++)
+	{
+		A[i][n-1] = A[0][n-1]-b*i;			
+	}
+
+	double c = (A[m-1][n-1] - A[m-1][0]) / (n-1);
+	printf("c=%f\n", c);
+ 
+	for (size_t i=0; i<n; i++)
+	{
+		A[m-1][n-1-i] = A[m-1][n-1]-c*i;			
+	}
+	
+	double d = (A[0][0] - A[m-1][0]) / (m-1);
+	printf("d=%f\n", d);
+ 
+	for (size_t i=0; i<n; i++)
+	{
+		A[i][0] = A[0][0]-d*i;			
+	}
 	
 
 }
@@ -33,8 +64,8 @@ int main()
     cout << "Hello World!" << endl;
 
     size_t iter_max = 5;
-    const size_t m = 3;
-    const size_t n = 3;
+    const size_t m = 11;
+    const size_t n = 11;
 
     double **A = new double* [m];
     double **Anew = new double* [m];
@@ -64,7 +95,7 @@ int main()
     printf("\n");
  
 
-	// return 0;
+	return 0;
     //#pragma acc data copy(A) create(Anew)
     size_t iter = 0;
     double tol = 1e-5;
