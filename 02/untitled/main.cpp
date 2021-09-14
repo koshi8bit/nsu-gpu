@@ -95,15 +95,15 @@ int main()
     printf("\n");
  
 
-    //#pragma acc data copy(A) create(Anew)
-    size_t iter = 0;
+    #pragma acc data copy(A) create(Anew)
+    size_t it	er = 0;
     double tol = 1e-5;
     double err = tol+1.;
     while((err>tol) && (iter<iter_max))
     {
         iter++;
 		err = 0;
-        //#pragma acc kernels
+        #pragma acc kernels
         for(size_t i=1; i<m-1; i++)
         {
             for(size_t j=1; j<n-1; j++)
