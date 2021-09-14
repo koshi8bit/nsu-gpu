@@ -63,9 +63,9 @@ int main()
 {
     cout << "Hello World!" << endl;
 
-    size_t iter_max = 5;
-    const size_t m = 11;
-    const size_t n = 11;
+    size_t iter_max = 1500;
+    const size_t m = 100;
+    const size_t n = 100;
 
     double **A = new double* [m];
     double **Anew = new double* [m];
@@ -95,7 +95,6 @@ int main()
     printf("\n");
  
 
-	return 0;
     //#pragma acc data copy(A) create(Anew)
     size_t iter = 0;
     double tol = 1e-5;
@@ -114,7 +113,7 @@ int main()
             }
 
             // A = Anew;
-			printt(Anew, m, n); 
+			// printt(Anew, m, n); 
 
             for(size_t ii=0; ii<m; ii++)
             {
@@ -123,15 +122,13 @@ int main()
                     A[ii][jj] = Anew[ii][jj];
                 }
             }
-			printt(A, m, n); 
-			printf("\n");
+			//printt(A, m, n); 
+			//printf("\n");		
+        }
 
-            //if (iter % 100 == 0 || iter == 1)
-            {
-                printf("iter %-5d; err %-10.6f\n", iter, err);
-            }
-
-				
+        if (iter % 100 == 0 || iter == 1)
+        {
+            printf("iter %-5d; err %-10.6f\n", iter, err);
         }
     }
 
